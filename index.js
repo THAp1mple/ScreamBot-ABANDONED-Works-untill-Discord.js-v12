@@ -65,6 +65,7 @@ bot.on('message', async msg =>
                 
                     .addField('---------------------------------------------------', '**Media and games**')
                     .addField(config.PREFIX + '**play [arg: link][url/keywords]**', 'Search on Youtube and add to query.')
+                    .addField(config.PREFIX + '**stop**', 'Stop the music stream.')
                     .addField(config.PREFIX + '**skip**', 'Skip the current song.')
                     .addField(config.PREFIX + '**clear**', 'Clear the queue.')
                     .addField(config.PREFIX + '**watch2gether**', 'Get the link for the Watch2gether room.')
@@ -299,6 +300,12 @@ bot.on('message', async msg =>
                     }
                 }
                 break;
+
+            case 'stop':
+                msg.member.voice.channel.leave();
+                msg.channel.send('*Stopped. For now.*');
+                break;  
+
             case 'skip':
                 if(args[1] === 'link')
                 {
@@ -345,6 +352,7 @@ bot.on('message', async msg =>
                 break;
             case 'clear':
                 queue.length = 0;
+                msg.channel.send('Your queue is now empty.');
                 console.log(queue);
                 break;
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
