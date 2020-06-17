@@ -1,0 +1,7 @@
+{
+    "VERSION" : "1.0.0",
+    "AUTHOR" : "p1mple",
+    "PREFIX" : "%",
+    "SONGVOLUMESTRING" : "100",
+    "SONGVOLUMEINT" : 100
+}
