@@ -14,13 +14,16 @@ const opts = {
 
 var queue = [];
 
-bot.on('ready', async () => 
-{
-    console.log('Beep. Boop. Activated. REEEEEEEEEEEEE!');
-    bot.user.setStatus('dnd').catch(console.error);
-    bot.user.setActivity('Valorant', {type: 'PLAYING'}).catch(console.error);
-    console.log('**Youtube API:** ' + process.env.YOUTUBE_API)
-    console.log('**Discord Token:** ' + process.env.DISCORD_TOKEN)
+bot.on('ready', () => {
+    (async () => 
+    {
+        console.log('Beep. Boop. Activated. REEEEEEEEEEEEE!');
+        bot.user.setStatus('dnd').catch(console.error);
+        bot.user.setActivity('Valorant', {type: 'PLAYING'}).catch(console.error);
+        console.log('**Youtube API:** ' + process.env.YOUTUBE_API)
+        console.log('**Discord Token:** ' + process.env.DISCORD_TOKEN)
+    })()
+    .catch(console.log);
 });
 
 bot.on('message', async msg => 
