@@ -19,7 +19,7 @@ bot.on('ready', () => {
     {
         console.log('Beep. Boop. Activated. REEEEEEEEEEEEE!');
         bot.user.setStatus('dnd').catch(console.error);
-        bot.user.setActivity('Valorant', {type: 'PLAYING'}).catch(console.error);
+        bot.user.setActivity('Destiny 2', {type: 'PLAYING'}).catch(console.error);
         console.log('**Youtube API:** ' + process.env.YOUTUBE_API)
         console.log('**Discord Token:** ' + process.env.DISCORD_TOKEN)
     })()
