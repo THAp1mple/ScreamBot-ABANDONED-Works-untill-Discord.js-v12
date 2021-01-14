@@ -32,7 +32,7 @@ bot.on('message', async msg =>
     {
         const connection = await msg.member.voice.channel.join();
 
-        const audio = connection.play(ytdl(url, {filter: 'audio'}),{volume: (1 * (config.SONGVOLUMEINT/100))});
+        const audio = connection.play(await ytdl(url, {filter: 'audioonly'}),{volume: (1 * (config.SONGVOLUMEINT/100))});
 
         audio.on('finish', () =>{
             queue.shift();
@@ -41,7 +41,7 @@ bot.on('message', async msg =>
             } else {
                 connection.disconnect();
             }
-        });
+        }).on("error", error => console.error(error));
     }
 
     if(msg.author.bot) return;
@@ -119,7 +119,7 @@ bot.on('message', async msg =>
                 {
                     const connection = await msg.member.voice.channel.join();
                     msg.channel.send('*Hello* ' + msg.member.user.username + '. *Prepare your ears.*');
-                    const audio = connection.play(ytdl('https://www.youtube.com/watch?v=6bCfmg-VcmI', {filter: 'audioonly'}),{volume: 0.2});
+                    const audio = connection.play('Sounds/scream.mp3',{volume: 0.2});
                     audio.on('finish', () =>{
                         connection.disconnect();
                     });
@@ -134,7 +134,7 @@ bot.on('message', async msg =>
                 {
                     const connection = await msg.member.voice.channel.join();
                     msg.channel.send('*Hello* ' + msg.member.user.username + '. *Here is your delivery.*');
-                    const audio = connection.play(ytdl('https://www.youtube.com/watch?v=2ZIpFytCSVc', {filter: 'audioonly'}),{volume: 10.0});
+                    const audio = connection.play('Sounds/bruh.mp3',{volume: 10.0});
                     audio.on('finish', () =>{
                         connection.disconnect();
                     });
@@ -149,7 +149,7 @@ bot.on('message', async msg =>
                 {   
                     const connection = await msg.member.voice.channel.join();
                     msg.channel.send('*Think of it as training*, ' + msg.member.user.username);
-                    const audio = connection.play(ytdl('https://www.youtube.com/watch?v=jPg2MIFUMDg', {filter: 'audioonly'}),{volume: 0.2});
+                    const audio = connection.play('Sounds/exercise.mp3',{volume: 0.2});
                     audio.on('finish', () =>{
                         connection.disconnect();
                     });
@@ -164,7 +164,7 @@ bot.on('message', async msg =>
                 {   
                     const connection = await msg.member.voice.channel.join();
                     msg.channel.send('*Hello* ' + msg.member.user.username + '. *Here is your delivery.*');
-                    const audio = connection.play(ytdl('https://www.youtube.com/watch?v=D8KxdXEBkhw', {filter: 'audioonly'}),{volume: 6.0});
+                    const audio = connection.play('Sounds/yeet.mp3',{volume: 6.0});
                     audio.on('finish', () =>{
                         connection.disconnect();
                     });
@@ -179,7 +179,7 @@ bot.on('message', async msg =>
                 {   
                     const connection = await msg.member.voice.channel.join();
                     msg.channel.send('*Hello* ' + msg.member.user.username + '. *Here is your delivery.*');
-                    const audio = connection.play(ytdl('https://youtu.be/iYf7WBStTZ8', {filter: 'audioonly',}),{volume: 0.7});
+                    const audio = connection.play('Sounds/diamonds.mp3',{volume: 0.7});
                     audio.on('finish', () =>{
                             connection.disconnect();
                     });
