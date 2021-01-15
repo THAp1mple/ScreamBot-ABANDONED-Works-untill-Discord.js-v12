@@ -32,7 +32,7 @@ bot.on('message', async msg =>
     {
         const connection = await msg.member.voice.channel.join();
 
-        const audio = connection.play(await ytdl(url, {filter: 'audioonly'}),{volume: (1 * (config.SONGVOLUMEINT/100))});
+        const audio = connection.play(ytdl(url, {filter: 'audio'}),{volume: (1 * (config.SONGVOLUMEINT/100))});
 
         audio.on('finish', () =>{
             queue.shift();
