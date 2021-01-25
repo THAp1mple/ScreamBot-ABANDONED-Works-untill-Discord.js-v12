@@ -19,7 +19,7 @@ bot.on('ready', () => {
     {
         console.log('Beep. Boop. Activated. REEEEEEEEEEEEE!');
         bot.user.setStatus('dnd').catch(console.error);
-        bot.user.setActivity('Destiny 2', {type: 'PLAYING'}).catch(console.error);
+        bot.user.setActivity(config.PLAYING, {type: 'PLAYING'}).catch(console.error);
         console.log('**Youtube API:** ' + process.env.YOUTUBE_API)
         console.log('**Discord Token:** ' + process.env.DISCORD_TOKEN)
     })()
@@ -103,7 +103,7 @@ bot.on('message', async msg =>
             case 'songvolume':
                 if(!args[1] || args[1] === 'undefined')
                 {
-                    msg.channel.send('Please choose a volume percentage.')
+                    msg.channel.send('The volume is currently at ' + config.SONGVOLUMEINT + '%.')
                 } else
                 {
                     config.SONGVOLUMESTRING = args[1];
@@ -242,9 +242,9 @@ bot.on('message', async msg =>
                     {
                         msg.reply('*I want to but I cannot.* You need to be in a voice channel or type keywords or a link in.');
 
-                    } else if((!args[1] && queue[0]) || (args[1] && !queue[0]))
+                    } else if(!args[1] && queue[0])
                     {
-                        let searchString = args.slice(1) + ''
+                        let searchString = queue.slice(0) + '';
                         let results = await search(searchString, opts).catch(err => console.log(err));
                         let youtubeResults = results.results
                         let link = youtubeResults.map(result => {

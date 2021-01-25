@@ -3,5 +3,6 @@
     "AUTHOR" : "p1mple",
     "PREFIX" : "%",
     "SONGVOLUMESTRING" : "100",
-    "SONGVOLUMEINT" : 100
+    "SONGVOLUMEINT" : 100,
+    "PLAYING" : ""
 }
