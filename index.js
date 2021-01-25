@@ -30,7 +30,7 @@ bot.on('message', async msg =>
 {
     async function play(url)
     {
-        const connection = await msg.member.voice.channel.join();
+        const connection = await msg.member.voice.channel.join()
 
         const audio = connection.play(ytdl(url, {filter: 'audio'}),{volume: (1 * (config.SONGVOLUMEINT/100))});
 
@@ -118,7 +118,7 @@ bot.on('message', async msg =>
                 if(msg.member.voice.channel)
                 {
                     const connection = await msg.member.voice.channel.join();
-                    msg.channel.send('*Hello* ' + msg.member.user.username + '. *Prepare your ears.*');
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Prepare your ears.*');
                     const audio = connection.play('Sounds/scream.mp3',{volume: 0.2});
                     audio.on('finish', () =>{
                         connection.disconnect();
@@ -133,7 +133,7 @@ bot.on('message', async msg =>
                 if(msg.member.voice.channel)
                 {
                     const connection = await msg.member.voice.channel.join();
-                    msg.channel.send('*Hello* ' + msg.member.user.username + '. *Here is your delivery.*');
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
                     const audio = connection.play('Sounds/bruh.mp3',{volume: 10.0});
                     audio.on('finish', () =>{
                         connection.disconnect();
@@ -148,7 +148,7 @@ bot.on('message', async msg =>
                 if(msg.member.voice.channel)
                 {   
                     const connection = await msg.member.voice.channel.join();
-                    msg.channel.send('*Think of it as training*, ' + msg.member.user.username);
+                    msg.channel.send('*Think of it as training*, ' + '[<@'+msg.member.user.id+'>]');
                     const audio = connection.play('Sounds/exercise.mp3',{volume: 0.2});
                     audio.on('finish', () =>{
                         connection.disconnect();
@@ -163,7 +163,7 @@ bot.on('message', async msg =>
                 if(msg.member.voice.channel)
                 {   
                     const connection = await msg.member.voice.channel.join();
-                    msg.channel.send('*Hello* ' + msg.member.user.username + '. *Here is your delivery.*');
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
                     const audio = connection.play('Sounds/yeet.mp3',{volume: 6.0});
                     audio.on('finish', () =>{
                         connection.disconnect();
@@ -178,7 +178,7 @@ bot.on('message', async msg =>
                 if(msg.member.voice.channel)
                 {   
                     const connection = await msg.member.voice.channel.join();
-                    msg.channel.send('*Hello* ' + msg.member.user.username + '. *Here is your delivery.*');
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
                     const audio = connection.play('Sounds/diamonds.mp3',{volume: 0.7});
                     audio.on('finish', () =>{
                             connection.disconnect();
@@ -206,102 +206,74 @@ bot.on('message', async msg =>
             
             //Youtube commands
             case 'play': 
-                if(args[1] === 'link')
+                if(!msg.member.voice.channel || (!args[1] && !queue[0]))
                 {
-                    if(!queue[0])
-                    {
-                        play(args[2])
+                    msg.reply('*I want to but I cannot.* You need to be in a voice channel or type keywords or a link in.');
 
-                        const playing = new Discord.MessageEmbed()
-                        .setTitle('Playing Music')
-                        .addField('Request by ' + msg.member.user.id, '*Oooh. Music.*',)
-                        .addField(args[2],'---------------------------------------------------------------');
-                        msg.channel.send(playing)
-                        if(args[2])
-                        {
-                            queue.push(args[2]);
-                        }
-                    } else
+                } else if((!args[1] && queue[0]) || (args[1] && !queue[0]))
+                {
+                    let searchString
+                    if(!args[1] && queue[0]) {searchString = queue.slice(0) + ''} else if(args[1] && !queue[0]) {searchString = args.slice(0) + '' }
+                    let results = await search(searchString, opts).catch(err => console.log(err));
+                    let youtubeResults = results.results
+                    let link = youtubeResults.map(result => {
+                        return result.link
+                    })
+                    let title = youtubeResults.map(result => {
+                        return result.title
+                    })
+                    finalLink = '' + link
+                    finalTitle = '' + title
+
+                    const playing = new Discord.MessageEmbed()
+                    .setTitle('Playing Music')
+                    .addField(finalTitle, '*Oooh. Music.*')
+                    .addField('Requested by:', '[<@'+msg.author.id+'>]')
+                    .setFooter(config.FOOTERMSG, msg.author.avatarURL)
+                    .addField(finalLink,'---------------------------------------------------------------')
+                    msg.channel.send(playing)
+                    if(args[1])
                     {
-                        const playing = new Discord.MessageEmbed()
-                        .setTitle('Added to queue')
-                        .addField('Request by ' + msg.member.user.id, '*Oooh. Music.*',)
-                        .addField(args[2],'---------------------------------------------------------------');
-                        msg.channel.send(playing)
-                        if(args[2])
-                        {
-                            queue.push(args[2]);
-                        } else
-                        {
-                            return
-                        }
+                        queue.push(finalLink);
                     }
                     console.log(queue)
-                } else
-                {   if(!msg.member.voice.channel || (!args[1] && !queue[0]))
+                    if((!queue[0]) && !args[1])
                     {
-                        msg.reply('*I want to but I cannot.* You need to be in a voice channel or type keywords or a link in.');
-
-                    } else if((!args[1] && queue[0]) || (args[1] && !queue[0]))
+                        msg.channel.send('The queue is empty.')
+                    } else
                     {
-                        let searchString
-                        if(!args[1] && queue[0]) {searchString = queue.slice(0) + ''} else {searchString = args.slice(0) + '' }
-                        let results = await search(searchString, opts).catch(err => console.log(err));
-                        let youtubeResults = results.results
-                        let link = youtubeResults.map(result => {
-                            return result.link
-                        })
-                        let title = youtubeResults.map(result => {
-                            return result.title
-                        })
-                        finalLink = '' + link
-                        finalTitle = '' + title
-
-                        const playing = new Discord.MessageEmbed()
-                        .setTitle('Playing Music')
-                        .addField(finalTitle, '*Oooh. Music.*')
-                        .addField(finalLink,'---------------------------------------------------------------');
-                        msg.channel.send(playing)
-                        if(args[1])
-                        {
-                            queue.push(finalLink);
-                        }
-                        console.log(queue)
-                        if((!queue[0]) && !args[1])
-                        {
-                            msg.channel.send('The queue is empty.')
-                        } else
-                        {
-                            play(queue[0] + '')
-                        }
-
-                    } else if(args[1] && queue[0])
-                    {
-                        let searchString = args.slice(1) + ''
-                        let results = await search(searchString, opts).catch(err => console.log(err));
-                        let youtubeResults = results.results
-                        let link = youtubeResults.map(result => {
-                            return result.link
-                        })
-                        let title = youtubeResults.map(result => {
-                            return result.title
-                        })
-                        finalLink = '' + link
-                        finalTitle = '' + title
-
-                        const playing = new Discord.MessageEmbed()
-                        .setTitle('Added to queue')
-                        .addField(finalTitle, '*Oooh. Music.*')
-                        .addField(finalLink,'---------------------------------------------------------------');
-                        msg.channel.send(playing)
-
-                        if(args[1])
-                        {
-                            queue.push(finalLink);
-                        }
-
-                        console.log(queue)
+                        play(queue[0] + '')
                     }
+
+                } else if(args[1] && queue[0])
+                {
+                    let searchString = args.slice(0) + ''
+                    let results = await search(searchString, opts).catch(err => console.log(err));
+                    let youtubeResults = results.results
+                    let link = youtubeResults.map(result => {
+                        return result.link
+                    })
+                    let title = youtubeResults.map(result => {
+                        return result.title
+                    })
+                    finalLink = '' + link
+                    finalTitle = '' + title
+
+                    const playing = new Discord.MessageEmbed()
+                    .setTitle('Added to queue')
+                    .addField(finalTitle, '*Oooh. Music.*')
+                    .addField('Requested by:', '[<@'+msg.author.id+'>]')
+                    .setFooter(config.FOOTERMSG, msg.author.avatarURL)
+                    .addField(finalLink,'---------------------------------------------------------------')
+                    
+                    msg.channel.send(playing)
+
+                    if(args[1])
+                    {
+                        queue.push(finalLink);
+                    }
+
+                    console.log(queue)
                 }
                 break;
 
@@ -311,21 +283,11 @@ bot.on('message', async msg =>
                 break;  
 
             case 'skip':
-                if(args[1] === 'link')
-                {
-                    queue.shift();
-                    if((!queue[0]) && !args[2])
-                    {
-                        msg.channel.send('The queue is empty.')
-                    } else
-                    {
-                        play(queue[0] + '')
-                    }
-
-                } else if(queue[0])
+                if(queue[0] && queue[1] && queue[1] !== 'undefined')
                 {   
                     queue.shift();
-                    let searchString = queue[0] + ''
+                    let searchString
+                    if(!args[1] && queue[0]) {searchString = queue.slice(0) + ''} else if(args[1] && !queue[0]) {searchString = args.slice(0) + '' }
                     let results = await search(searchString, opts).catch(err => console.log(err));
                     let youtubeResults = results.results
                     let link = youtubeResults.map(result => {
@@ -340,7 +302,9 @@ bot.on('message', async msg =>
                     const playing = new Discord.MessageEmbed()
                     .setTitle('Playing')
                     .addField(finalTitle, '*Oooh. Music.*')
-                    .addField(finalLink,'---------------------------------------------------------------');
+                    .addField('Requested by:', '[<@'+msg.author.id+'>]')
+                    .setFooter(connection.voice.channel, msg.author.avatarURL)
+                    .addField(finalLink,'---------------------------------------------------------------')
                     msg.channel.send(playing)
 
                     console.log(queue)
