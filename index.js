@@ -63,24 +63,26 @@ bot.on('message', async msg =>
                     .addField('---------------------------------------------------', '**Bot settings and information**')
                     .addField(config.PREFIX + '**help**','Get commands for the ScreamBot.')
                     .addField(config.PREFIX + '**info**','Get information about the ScreamBot.')
-                    .addField(config.PREFIX + '**songvolume [percentage]**', 'Change the volume of the songs.')
+                    .addField(config.PREFIX + '**songvolume [arg: percentage]**', 'Change the volume of the songs.')
                     .addField(config.PREFIX + '**changeprefix [prefix]**', 'Change the prefix for the bots commands.')
                 
                     .addField('---------------------------------------------------', '**Media and games**')
-                    .addField(config.PREFIX + '**play [arg: link][url/keywords]**', 'Search on Youtube and add to query.')
+                    .addField(config.PREFIX + '**play [url/keywords]**', 'Search on Youtube and add to query.')
                     .addField(config.PREFIX + '**stop**', 'Stop the music stream.')
                     .addField(config.PREFIX + '**skip**', 'Skip the current song.')
                     .addField(config.PREFIX + '**clear**', 'Clear the queue.')
                     .addField(config.PREFIX + '**watch2gether**', 'Get the link for the Watch2gether room.')
                     .addField(config.PREFIX + '**rollrandomnuber [min] [max]**', 'Roll a random number.')
                 
-                    .addField('---------------------------------------------------', '**Soundeffects**')
+                    .addField('---------------------------------------------------', '**Soundboard**')
                     .addField(config.PREFIX + '**scream**','A suprise for your ears.')
                     .addField(config.PREFIX + '**bruh**', 'Deliver a big bruh.')
                     .addField(config.PREFIX + '**yeet**', 'Yeet you enemies away.')
                     .addField(config.PREFIX + '**exercise**', 'Think of it as training guardian.')
                     .addField(config.PREFIX + '**diamonds**', 'We are rich!')
+                    .addField(config.PREFIX + '**sponge**', 'Are you ready kids?')
 
+                    .setFooter(config.FOOTERMSG, msg.author.avatarURL)
                     msg.channel.send(embed)
                 }
                 break;
@@ -187,6 +189,45 @@ bot.on('message', async msg =>
                 {
                     msg.reply('*I want to but I cannot.* You need to be in a voice channel for the bot to join.');                }
                 break;
+            case 'sponge':
+                if(msg.member.voice.channel)
+                {   
+                    const connection = await msg.member.voice.channel.join();
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
+                    const audio = connection.play('Sounds/sponge.mp3',{volume: 0.7});
+                    audio.on('finish', () =>{
+                            connection.disconnect();
+                    });
+                } else
+                {
+                    msg.reply('*I want to but I cannot.* You need to be in a voice channel for the bot to join.');                }
+                break;
+            case 'freestuff':
+                if(msg.member.voice.channel)
+                {   
+                    const connection = await msg.member.voice.channel.join();
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
+                    const audio = connection.play('Sounds/freestuff.mp3',{volume: 0.7});
+                    audio.on('finish', () =>{
+                            connection.disconnect();
+                    });
+                } else
+                {
+                    msg.reply('*I want to but I cannot.* You need to be in a voice channel for the bot to join.');                }
+                break;
+            case 'elotrix':
+                if(msg.member.voice.channel)
+                {   
+                    const connection = await msg.member.voice.channel.join();
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
+                    const audio = connection.play('Sounds/elotrix.mp3',{volume: 0.7});
+                    audio.on('finish', () =>{
+                            connection.disconnect();
+                    });
+                } else
+                {
+                    msg.reply('*I want to but I cannot.* You need to be in a voice channel for the bot to join.');                }
+                break;
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             //Games
@@ -283,7 +324,7 @@ bot.on('message', async msg =>
                 break;  
 
             case 'skip':
-                if(queue[0] && queue[1] && queue[1] !== 'undefined')
+                if(queue[0] && queue[1] !== 'undefined' && queue[0] !== 'undefined')
                 {   
                     queue.shift();
                     let searchString
@@ -303,7 +344,7 @@ bot.on('message', async msg =>
                     .setTitle('Playing')
                     .addField(finalTitle, '*Oooh. Music.*')
                     .addField('Requested by:', '[<@'+msg.author.id+'>]')
-                    .setFooter(connection.voice.channel, msg.author.avatarURL)
+                    .setFooter(config.FOOTERMSG, msg.author.avatarURL)
                     .addField(finalLink,'---------------------------------------------------------------')
                     msg.channel.send(playing)
 
