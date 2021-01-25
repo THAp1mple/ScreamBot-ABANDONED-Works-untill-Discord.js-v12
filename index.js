@@ -214,7 +214,7 @@ bot.on('message', async msg =>
 
                         const playing = new Discord.MessageEmbed()
                         .setTitle('Playing Music')
-                        .addField('Request by ' + msg.member.user.username, '*Oooh. Music.*',)
+                        .addField('Request by ' + msg.member.user.id, '*Oooh. Music.*',)
                         .addField(args[2],'---------------------------------------------------------------');
                         msg.channel.send(playing)
                         if(args[2])
@@ -225,7 +225,7 @@ bot.on('message', async msg =>
                     {
                         const playing = new Discord.MessageEmbed()
                         .setTitle('Added to queue')
-                        .addField('Request by ' + msg.member.user.username, '*Oooh. Music.*',)
+                        .addField('Request by ' + msg.member.user.id, '*Oooh. Music.*',)
                         .addField(args[2],'---------------------------------------------------------------');
                         msg.channel.send(playing)
                         if(args[2])
@@ -242,9 +242,10 @@ bot.on('message', async msg =>
                     {
                         msg.reply('*I want to but I cannot.* You need to be in a voice channel or type keywords or a link in.');
 
-                    } else if(!args[1] && queue[0])
+                    } else if((!args[1] && queue[0]) || (args[1] && !queue[0]))
                     {
-                        let searchString = queue.slice(0) + '';
+                        let searchString
+                        if(!args[1] && queue[0]) {searchString = queue.slice(0) + ''} else {searchString = args.slice(0) + '' }
                         let results = await search(searchString, opts).catch(err => console.log(err));
                         let youtubeResults = results.results
                         let link = youtubeResults.map(result => {
@@ -321,7 +322,7 @@ bot.on('message', async msg =>
                         play(queue[0] + '')
                     }
 
-                } else
+                } else if(queue[0])
                 {   
                     queue.shift();
                     let searchString = queue[0] + ''
@@ -343,14 +344,11 @@ bot.on('message', async msg =>
                     msg.channel.send(playing)
 
                     console.log(queue)
-                    if((!queue[0]) && !args[1])
-                    {
-                        msg.channel.send('The queue is empty.')
-                    } else
-                    {
-                        play(queue[0] + '')
-                    }
-
+                    play(queue[0] + '');
+                }
+                else
+                {
+                    msg.channel.send('The queue is empty.')
                 }
                 break;
             case 'clear':
