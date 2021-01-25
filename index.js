@@ -81,6 +81,9 @@ bot.on('message', async msg =>
                     .addField(config.PREFIX + '**exercise**', 'Think of it as training guardian.')
                     .addField(config.PREFIX + '**diamonds**', 'We are rich!')
                     .addField(config.PREFIX + '**sponge**', 'Are you ready kids?')
+                    .addField(config.PREFIX + '**freestuff**', 'Get the moderator rank.')
+                    .addField(config.PREFIX + '**elotrix**', 'Enjoy Elotrix.')
+                    .addField(config.PREFIX + '**mlg**', 'Blaze it in the current year.')
 
                     .setFooter(config.FOOTERMSG, msg.author.avatarURL)
                     msg.channel.send(embed)
@@ -221,6 +224,19 @@ bot.on('message', async msg =>
                     const connection = await msg.member.voice.channel.join();
                     msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
                     const audio = connection.play('Sounds/elotrix.mp3',{volume: 0.7});
+                    audio.on('finish', () =>{
+                            connection.disconnect();
+                    });
+                } else
+                {
+                    msg.reply('*I want to but I cannot.* You need to be in a voice channel for the bot to join.');                }
+                break;
+            case 'mlg':
+                if(msg.member.voice.channel)
+                {   
+                    const connection = await msg.member.voice.channel.join();
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
+                    const audio = connection.play('Sounds/mlg.mp3',{volume: 0.7});
                     audio.on('finish', () =>{
                             connection.disconnect();
                     });
