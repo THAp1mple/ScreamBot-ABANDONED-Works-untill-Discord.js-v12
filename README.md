@@ -23,7 +23,7 @@ The commands of the Bot are commented but still I'm going to write them down her
 - elotrix
 - mlg
 
-To get it running, you need node.js with the following modules: 
+To get it running, you need node.js 14.0.0 with the following packages and their dependencies: 
 - youtube-search by MaxGfeller,
 - ytdl-core by fent,
 - discord.js.
