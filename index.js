@@ -265,12 +265,12 @@ bot.on('message', async msg =>
             case 'play': 
                 if(!msg.member.voice.channel || (!args[1] && !queue[0]))
                 {
-                    msg.reply('*I want to but I cannot.* You need to be in a voice channel or type keywords or a link in.');
+                    msg.channel.send('[<@'+msg.author.id+'>]' + '*I want to but I cannot.* You need to be in a voice channel or type keywords or a link in.');
 
                 } else if((!args[1] && queue[0]) || (args[1] && !queue[0]))
                 {
                     let searchString
-                    if(!args[1] && queue[0]) {searchString = queue.slice(0) + ''} else if(args[1] && !queue[0]) {searchString = args.slice(0) + '' }
+                    if(!args[1] && queue[0]) {searchString = queue[0] + ''} else if(args[1] && !queue[0]) {searchString = args.slice(0) + '' }
                     let results = await search(searchString, opts).catch(err => console.log(err));
                     let youtubeResults = results.results
                     let link = youtubeResults.map(result => {
@@ -344,7 +344,7 @@ bot.on('message', async msg =>
                 {   
                     queue.shift();
                     let searchString
-                    if(!args[1] && queue[0]) {searchString = queue.slice(0) + ''} else if(args[1] && !queue[0]) {searchString = args.slice(0) + '' }
+                    if(!args[1] && queue[0]) {searchString = queue[0] + ''} else if(args[1] && !queue[0]) {searchString = args.slice(0) + '' }
                     let results = await search(searchString, opts).catch(err => console.log(err));
                     let youtubeResults = results.results
                     let link = youtubeResults.map(result => {
