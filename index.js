@@ -61,6 +61,8 @@ bot.on('message', async msg =>
                     .setTitle('Commands')
                     
                     .addField('---------------------------------------------------', '**Bot settings and information**')
+                    .addField(config.PREFIX + '**join**','The ScreamBot joins the Channel.')
+                    .addField(config.PREFIX + '**leave**','The ScreamBot leaves the Channel.')
                     .addField(config.PREFIX + '**help**','Get commands for the ScreamBot.')
                     .addField(config.PREFIX + '**info**','Get information about the ScreamBot.')
                     .addField(config.PREFIX + '**songvolume [arg: percentage]**', 'Change the volume of the songs.')
@@ -283,7 +285,7 @@ bot.on('message', async msg =>
                     finalTitle = '' + title
 
                     const playing = new Discord.MessageEmbed()
-                    .setTitle('Playing Music')
+                    .setTitle('Now Playing')
                     .addField(finalTitle, '*Oooh. Music.*')
                     .addField('Requested by:', '[<@'+msg.author.id+'>]')
                     .setFooter(config.FOOTERMSG, msg.author.avatarURL)
@@ -340,11 +342,10 @@ bot.on('message', async msg =>
                 break;  
 
             case 'skip':
-                if(queue[0] && queue[1] !== 'undefined' && queue[0] !== 'undefined')
+                if(queue[1] && queue[1] !== 'undefined')
                 {   
                     queue.shift();
-                    let searchString
-                    if(!args[1] && queue[0]) {searchString = queue[0] + ''} else if(args[1] && !queue[0]) {searchString = args.slice(0) + '' }
+                    let searchString = queue.slice(0) + ''
                     let results = await search(searchString, opts).catch(err => console.log(err));
                     let youtubeResults = results.results
                     let link = youtubeResults.map(result => {
@@ -357,7 +358,7 @@ bot.on('message', async msg =>
                     finalTitle = '' + title
 
                     const playing = new Discord.MessageEmbed()
-                    .setTitle('Playing')
+                    .setTitle('Now Playing')
                     .addField(finalTitle, '*Oooh. Music.*')
                     .addField('Requested by:', '[<@'+msg.author.id+'>]')
                     .setFooter(config.FOOTERMSG, msg.author.avatarURL)
@@ -381,8 +382,12 @@ bot.on('message', async msg =>
 
             //Tell the bot to piss of
             case 'leave':
-                const connection = await msg.member.voice.channel.leave();
+                const disconnection = await msg.member.voice.channel.leave();
                 msg.channel.send('*I will return*');
+                break;
+            case 'join':
+                const connection = msg.member.voice.channel.join();
+                msg.channel.send('HELLO THERE ' + '[<@'+msg.author.id+'>]' + '!')
                 break;
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
