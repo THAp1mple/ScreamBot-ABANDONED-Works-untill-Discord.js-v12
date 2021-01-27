@@ -272,7 +272,18 @@ bot.on('message', async msg =>
                 } else if((!args[1] && queue[0]) || (args[1] && !queue[0]))
                 {
                     let searchString
-                    if(!args[1] && queue[0]) {searchString = queue[0] + ''} else if(args[1] && !queue[0]) {searchString = args.slice(0) + '' }
+                    if((args[1] && !queue[0]) && (args[1].includes("https://www.youtube.com/watch?v=") || args[1].includes("http://www.youtube.com/watch?v=") || args[1].includes("http://youtu.be/") || args[1].includes("https://youtu.be/")))
+                        searchString = args[1].slice(0, 43);
+                    else
+                    {
+                        if(!args[1] && queue[0]) 
+                        {
+                            searchString = queue[0] + ''
+                        } else if(args[1] && !queue[0]) 
+                        {
+                            searchString = args.slice(0) + '' 
+                        }
+                    }
                     let results = await search(searchString, opts).catch(err => console.log(err));
                     let youtubeResults = results.results
                     let link = youtubeResults.map(result => {
@@ -306,7 +317,11 @@ bot.on('message', async msg =>
 
                 } else if(args[1] && queue[0])
                 {
-                    let searchString = args.slice(0) + ''
+                    let searchString
+                    if((args[1].includes("https://www.youtube.com/watch?v=") || args[1].includes("http://www.youtube.com/watch?v=") || args[1].includes("http://youtu.be/") || args[1].includes("https://youtu.be/")))
+                        searchString = args[1].slice(0, 43);
+                    else
+                        searchString = args.slice(0) + '';
                     let results = await search(searchString, opts).catch(err => console.log(err));
                     let youtubeResults = results.results
                     let link = youtubeResults.map(result => {
