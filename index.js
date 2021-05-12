@@ -26,6 +26,15 @@ bot.on('ready', () => {
     .catch(console.log);
 });
 
+bot.on('presenceUpdate', () => 
+{
+    (async () =>
+    {
+        bot.user.setStatus('dnd').catch(console.error);
+        bot.user.setActivity(config.PLAYING, {type: 'PLAYING'}).catch(console.error);
+    });
+});
+
 bot.on('message', async msg => 
 {
     async function play(url)
@@ -38,8 +47,6 @@ bot.on('message', async msg =>
             queue.shift();
             if(queue[0]){
                 play(queue[0] + '')
-            } else {
-                connection.disconnect();
             }
         }).on("error", error => console.error(error));
     }
@@ -86,8 +93,9 @@ bot.on('message', async msg =>
                     .addField(config.PREFIX + '**freestuff**', 'Get the moderator rank.')
                     .addField(config.PREFIX + '**elotrix**', 'Enjoy Elotrix.')
                     .addField(config.PREFIX + '**mlg**', 'Blaze it in the current year.')
-
-                    .setFooter(config.FOOTERMSG, msg.author.avatarURL)
+                    .addField(config.PREFIX + '**thot**', 'BEGONE THOT!!.')
+                    if(config.FOOTER !== undefined)
+                        embed.setFooter(config.FOOTERMSG, msg.author.avatarURL)
                     msg.channel.send(embed)
                 }
                 break;
@@ -97,14 +105,14 @@ bot.on('message', async msg =>
             case 'info':
                 msg.channel.send('I am in version ' + config.VERSION + ' and ' + config.AUTHOR + ' is my daddy.')
                 break;
-            case 'changeconfig.PREFIX':
+            case 'changeprefix':
                 if(!args[1] || args[1] === 'undefined')
                 {
-                    msg.channel.send('Please type your config.PREFIX as a second argument.')
+                    msg.channel.send('Please type your prefix as a second argument.')
                 } else
                 {
                     config.PREFIX = args[1];
-                    msg.channel.send('Your config.PREFIX has been set.')
+                    msg.channel.send('Your prefix has been set.')
                 }
                 break;
             case 'songvolume':
@@ -113,8 +121,7 @@ bot.on('message', async msg =>
                     msg.channel.send('The volume is currently at ' + config.SONGVOLUMEINT + '%.')
                 } else
                 {
-                    config.SONGVOLUMESTRING = args[1];
-                    config.SONGVOLUMEINT = parseInt(config.SONGVOLUMESTRING, 10)
+                    config.SONGVOLUMEINT = parseInt(args[1], 10)
                     msg.channel.send('The Song Volume has been adjusted.')
                 }
                 break;
@@ -225,7 +232,7 @@ bot.on('message', async msg =>
                 {   
                     const connection = await msg.member.voice.channel.join();
                     msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
-                    const audio = connection.play('Sounds/elotrix.mp3',{volume: 0.7});
+                    const audio = connection.play('Sounds/elotrix.mp3',{volume: 6.0});
                     audio.on('finish', () =>{
                             connection.disconnect();
                     });
@@ -239,6 +246,19 @@ bot.on('message', async msg =>
                     const connection = await msg.member.voice.channel.join();
                     msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
                     const audio = connection.play('Sounds/mlg.mp3',{volume: 0.7});
+                    audio.on('finish', () =>{
+                            connection.disconnect();
+                    });
+                } else
+                {
+                    msg.reply('*I want to but I cannot.* You need to be in a voice channel for the bot to join.');                }
+                break;
+            case 'thot':
+                if(msg.member.voice.channel)
+                {   
+                    const connection = await msg.member.voice.channel.join();
+                    msg.channel.send('*Hello* ' + '[<@'+msg.member.user.id+'>]' + '. *Here is your delivery.*');
+                    const audio = connection.play('Sounds/thot.mp3',{volume: 10.0});
                     audio.on('finish', () =>{
                             connection.disconnect();
                     });
@@ -299,7 +319,8 @@ bot.on('message', async msg =>
                     .setTitle('Now Playing')
                     .addField(finalTitle, '*Oooh. Music.*')
                     .addField('Requested by:', '[<@'+msg.author.id+'>]')
-                    .setFooter(config.FOOTERMSG, msg.author.avatarURL)
+                    if(config.FOOTER !== undefined)
+                        embed.setFooter(config.FOOTERMSG, msg.author.avatarURL)
                     .addField(finalLink,'---------------------------------------------------------------')
                     msg.channel.send(playing)
                     if(args[1])
@@ -337,7 +358,8 @@ bot.on('message', async msg =>
                     .setTitle('Added to queue')
                     .addField(finalTitle, '*Oooh. Music.*')
                     .addField('Requested by:', '[<@'+msg.author.id+'>]')
-                    .setFooter(config.FOOTERMSG, msg.author.avatarURL)
+                    if(config.FOOTER !== undefined)
+                        embed.setFooter(config.FOOTERMSG, msg.author.avatarURL)
                     .addField(finalLink,'---------------------------------------------------------------')
                     
                     msg.channel.send(playing)
@@ -376,7 +398,8 @@ bot.on('message', async msg =>
                     .setTitle('Now Playing')
                     .addField(finalTitle, '*Oooh. Music.*')
                     .addField('Requested by:', '[<@'+msg.author.id+'>]')
-                    .setFooter(config.FOOTERMSG, msg.author.avatarURL)
+                    if(config.FOOTER !== undefined)
+                        embed.setFooter(config.FOOTERMSG, msg.author.avatarURL)
                     .addField(finalLink,'---------------------------------------------------------------')
                     msg.channel.send(playing)
 

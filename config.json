@@ -2,7 +2,6 @@
     "VERSION" : "1.0.3",
     "AUTHOR" : "p1mple",
     "PREFIX" : "%",
-    "SONGVOLUMESTRING" : "100",
     "SONGVOLUMEINT" : 100,
     "PLAYING" : "",
     "FOOTERMSG" : ""
