@@ -1,6 +1,6 @@
 # ScreamBot
 
-# NOTE:
+NOTE:
 THE BOT DOES NOT WORK IN DISCORD.JS VERSION ABOVE v12.
 
 A Discord Bot that has some special functions. Like screaming.
